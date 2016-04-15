@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 public class MainController : MonoBehaviour {
 
 	public LowLatencyAudioSource audioSource;
-	public AudioClip clip;
+	public AudioClip sound;
+	public AudioClip music;
 
 	// Use this for initialization
 	void Start () {
@@ -14,12 +15,21 @@ public class MainController : MonoBehaviour {
 
 
 	public void loadSound(){
-		audioSource.load (clip);
+		audioSource.load (sound);
 	}
 
 
 	public void playSound(){
-		audioSource.play (clip);
+		audioSource.play (sound);
+	}
+
+
+	public void loadMusic(){
+		audioSource.load (music);
+	}
+
+	public void playMusic(){
+		audioSource.load (music);
 	}
 
 

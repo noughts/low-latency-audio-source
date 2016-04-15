@@ -1,5 +1,15 @@
 apply plugin: 'java'
 
+sourceCompatibility = '1.7'             // コンパイルSDKのバージョンを指定
+jar.baseName = 'LowLatencyAudioSourcePlugIn'      // .jarの名称
+version = '1.0.0'                       // .jarのバージョン値
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('/Applications/Unity/PlaybackEngines/AndroidPlayer/Variations/mono/Release/Classes/classes.jar')  /*追記する行,classes.jarを追加する*/
+    compile files('/Users/noughts/Library/Android/sdk/platforms/android-22/android.jar')  /*追記する行,android.jarを追加する*/
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'      // コンパイル時の文字コード指定
 }
