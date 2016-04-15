@@ -7,6 +7,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	/// iOS、エディタ用のaudioSource;
 	AudioSource audioSource;
 	AndroidJavaObject soundObj;
+	AndroidJavaObject mediaPlayer;
 
 	Dictionary<string,int> soundIds = new Dictionary<string, int> ();
 
@@ -16,6 +17,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			AndroidJavaClass unityActivityClass =  new AndroidJavaClass( "com.unity3d.player.UnityPlayer" );
 			AndroidJavaObject activityObj = unityActivityClass.GetStatic<AndroidJavaObject>( "currentActivity" );
 			soundObj = new AndroidJavaObject( "com.catsknead.androidsoundfix.AudioCenter", 20, activityObj );
+			mediaPlayer = new AndroidJavaObject( "jp.dividual.LowLatencyAudioSourcePlugin", activityObj );
 		} else {
 			audioSource = gameObject.AddComponent<AudioSource> ();
 		}
@@ -45,6 +47,20 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		}
 		int soundId = soundObj.Call<int>( "loadSound", new object[] { "Resources/Sounds/" +  clip.name + ".mp3" } );
 		soundIds.Add (clip.name, soundId);
+	}
+
+	public void loadMusic(AudioClip clip){
+		if( onAndroidDevice () == false ){
+			return;
+		}
+		mediaPlayer.Call( "load", new object[] { "Resources/Sounds/" +  clip.name + ".mp3" } );
+	}
+	public void playMusic( AudioClip clip ){
+		if (onAndroidDevice ()) {
+			mediaPlayer.Call( "play" );
+		} else {
+			audioSource.PlayOneShot (clip);
+		}
 	}
 
 

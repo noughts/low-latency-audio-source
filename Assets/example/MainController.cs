@@ -25,11 +25,11 @@ public class MainController : MonoBehaviour {
 
 
 	public void loadMusic(){
-		audioSource.load (music);
+		audioSource.loadMusic (music);
 	}
 
 	public void playMusic(){
-		audioSource.load (music);
+		audioSource.playMusic (music);
 	}
 
 
