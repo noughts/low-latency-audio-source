@@ -26,6 +26,7 @@ public class LowLatencyAudioSourcePlugin {
 		try {
 			afd = _activity.getAssets().openFd( soundName );
 			_mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());// 音楽ファイルをmediaplayerに設定
+			_mediaPlayer.prepare();
 
 			// レイテンシを下げるためにプリロード
 			_mediaPlayer.start();
