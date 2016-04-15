@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -8,9 +9,15 @@ public class MainController : MonoBehaviour {
 	public AudioClip sound;
 	public AudioClip music;
 
+	public Text status_txt;
+
 	// Use this for initialization
 	void Start () {
-		
+		Application.targetFrameRate = 60;
+	}
+
+	void Update(){
+		status_txt.text = "time="+ audioSource.time;
 	}
 
 

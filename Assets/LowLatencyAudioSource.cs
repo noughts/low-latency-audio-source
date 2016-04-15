@@ -84,6 +84,11 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	}
 
 
+	public int time{
+		get{
+			return mediaPlayer.Call<int>( "getTime" );
+		}
+	}
 
 
 
