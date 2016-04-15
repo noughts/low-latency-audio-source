@@ -23,6 +23,17 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		}
 	}
 
+	void OnApplicationFocus( bool status ){
+		if( onAndroidDevice () ){
+			mediaPlayer.Call( "start" );
+		}
+	}
+
+	void OnApplicationPause(){
+		if( onAndroidDevice () ){
+			mediaPlayer.Call( "pause" );
+		}
+	}
 
 	void OnDestroy(){
 //		print ("OnDestroy");
