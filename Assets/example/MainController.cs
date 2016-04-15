@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MainController : MonoBehaviour {
 
@@ -8,12 +9,12 @@ public class MainController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		audioSource.load (clip);
+		
 	}
 
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void loadSound(){
+		audioSource.load (clip);
 	}
 
 
@@ -21,5 +22,9 @@ public class MainController : MonoBehaviour {
 		audioSource.play (clip);
 	}
 
+
+	public void reloadScene(){
+		SceneManager.LoadScene ("main");
+	}
 
 }

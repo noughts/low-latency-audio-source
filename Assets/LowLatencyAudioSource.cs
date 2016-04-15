@@ -10,22 +10,8 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	Dictionary<string,int> soundIds = new Dictionary<string, int> ();
 
-
-
-	bool onAndroidDevice(){
-		#if UNITY_EDITOR
-		return false;
-		#endif
-
-		if( Application.platform == RuntimePlatform.Android ){
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
 	void Awake(){
+//		print ("Awake");
 		if( onAndroidDevice () ){
 			AndroidJavaClass unityActivityClass =  new AndroidJavaClass( "com.unity3d.player.UnityPlayer" );
 			AndroidJavaObject activityObj = unityActivityClass.GetStatic<AndroidJavaObject>( "currentActivity" );
@@ -35,6 +21,17 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		}
 	}
 
+
+	void OnDestroy(){
+//		print ("OnDestroy");
+		if( onAndroidDevice () == false ){
+			return;
+		}
+		print ("このAudioSourceにロード済みの全てのサウンドをunloadします");
+		foreach (KeyValuePair<string, int> pair in soundIds) {
+			soundObj.Call( "unloadSound", new object[] { pair.Value } );
+		}
+	}
 
 
 	// Android用にクリップをロード
@@ -53,17 +50,37 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	/// 再生
 	public void play(AudioClip clip){
+		play (clip, 1);
+	}
+
+	/// ボリュームを指定して再生
+	public void play(AudioClip clip, float volume){
 		if( onAndroidDevice () ){
 			if( soundIds.ContainsKey (clip.name) == false ){
 				print (clip.name +"はまだロードされていません");
 				return;
 			}
 			int soundId = soundIds [clip.name];
-			soundObj.Call( "playSound", new object[] { soundId } );
+			soundObj.Call( "playSound", new object[] { soundId, volume } );
 		} else {
-			audioSource.PlayOneShot (clip);
+			audioSource.PlayOneShot (clip, volume);
 		}
 	}
 
+
+
+
+
+	bool onAndroidDevice(){
+		#if UNITY_EDITOR
+		return false;
+		#endif
+
+		if( Application.platform == RuntimePlatform.Android ){
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
