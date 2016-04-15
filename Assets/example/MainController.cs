@@ -8,9 +8,9 @@ public class MainController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		audioSource.load (clip);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	
