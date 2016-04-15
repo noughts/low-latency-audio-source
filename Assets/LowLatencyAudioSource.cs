@@ -43,7 +43,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			print ("すでに"+ clip.name +"は登録されています。");
 			return;
 		}
-		int soundId = soundObj.Call<int>( "loadSound", new object[] { "Resources/Sounds/" +  clip.name + ".wav" } );
+		int soundId = soundObj.Call<int>( "loadSound", new object[] { "Resources/Sounds/" +  clip.name + ".mp3" } );
 		soundIds.Add (clip.name, soundId);
 	}
 
