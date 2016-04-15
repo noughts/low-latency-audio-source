@@ -44,4 +44,8 @@ public class LowLatencyAudioSourcePlugin {
 		_mediaPlayer.stop();
 	}
 
+	public int getTime(){
+		return _mediaPlayer.getCurrentPosition();
+	}
+
 }
