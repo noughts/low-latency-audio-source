@@ -59,7 +59,8 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		if (onAndroidDevice ()) {
 			mediaPlayer.Call( "start" );
 		} else {
-			audioSource.PlayOneShot (clip);
+			audioSource.clip = clip;
+			audioSource.Play ();// playOneShotを使うとtimeがとれないのでこうしてます。
 		}
 	}
 

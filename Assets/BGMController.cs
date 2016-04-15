@@ -16,7 +16,6 @@ public class BGMController : MonoBehaviour {
 	
 
 	void Update(){
-		print (audioSource.time);
 		status_txt.text = "time="+ audioSource.time;
 	}
 
