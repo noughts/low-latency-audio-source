@@ -1,4 +1,4 @@
-package jp.dividual.lowLatencyAudioSourcePlugIn;
+package jp.dividual;
 
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
@@ -25,9 +25,22 @@ public class LowLatencyAudioSourcePlugin {
 
 		try {
 			afd = _activity.getAssets().openFd( soundName );
+			_mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());// 音楽ファイルをmediaplayerに設定
+
+			// レイテンシを下げるためにプリロード
+			_mediaPlayer.start();
+			_mediaPlayer.pause();
 		} catch( IOException e ) {
-			Log.e( "SoundPluginUnity", "File does not exist!" );
-			return;
+			Log.e("LLASP", "File does not exist!");
 		}
 	}
+
+	public void start(){
+		_mediaPlayer.start();
+	}
+
+	public void stop(){
+		_mediaPlayer.stop();
+	}
+
 }
