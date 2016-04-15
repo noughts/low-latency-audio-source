@@ -12,8 +12,21 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 
 
-	void Awake(){
+	bool onAndroidDevice(){
+		#if UNITY_EDITOR
+		return false;
+		#endif
+
 		if( Application.platform == RuntimePlatform.Android ){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	void Awake(){
+		if( onAndroidDevice () ){
 			AndroidJavaClass unityActivityClass =  new AndroidJavaClass( "com.unity3d.player.UnityPlayer" );
 			AndroidJavaObject activityObj = unityActivityClass.GetStatic<AndroidJavaObject>( "currentActivity" );
 			soundObj = new AndroidJavaObject( "com.catsknead.androidsoundfix.AudioCenter", 20, activityObj );
@@ -26,6 +39,9 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	// Android用にクリップをロード
 	public void load(AudioClip clip){
+		if( onAndroidDevice () == false ){
+			return;
+		}
 		if( soundIds.ContainsKey (clip.name) ){
 			print ("すでに"+ clip.name +"は登録されています。");
 			return;
@@ -37,7 +53,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	/// 再生
 	public void play(AudioClip clip){
-		if( Application.platform == RuntimePlatform.Android ){
+		if( onAndroidDevice () ){
 			if( soundIds.ContainsKey (clip.name) == false ){
 				print (clip.name +"はまだロードされていません");
 				return;
