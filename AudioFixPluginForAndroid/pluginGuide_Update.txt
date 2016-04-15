@@ -1,0 +1,15 @@
+Updated by: Matt and Saishy
+
+Changelog:
+- Added option to change volume.
+- Added option to change left and right volume, priority, loop and rate.
+- Added partial support to playing sounds in the editor.
+- Fixed rare crash bug.
+
+How to use:
+
+- Add AudioCenter.cs to a gameObject class and use AudioCenter.instance to call the functions.
+
+If you want to increase the amount of simultaneous streams (or decrease, to increase performance in cases where you don't need it) please edit the following line:
+soundObj = new AndroidJavaObject( "com.catsknead.androidsoundfix.AudioCenter", 5, activityObj );
+Change the number 5 to the desired amount of streams.
