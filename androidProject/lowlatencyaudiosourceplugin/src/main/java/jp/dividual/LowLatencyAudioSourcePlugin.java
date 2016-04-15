@@ -20,7 +20,7 @@ public class LowLatencyAudioSourcePlugin {
 	}
 
 
-	public void loadSound( String soundName ){
+	public void load( String soundName ){
 		AssetFileDescriptor afd;
 
 		try {
