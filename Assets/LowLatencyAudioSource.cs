@@ -84,9 +84,14 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	}
 
 
-	public int time{
+	public float time{
 		get{
-			return mediaPlayer.Call<int>( "getTime" );
+			if( onAndroidDevice () ){
+				int val = mediaPlayer.Call<int> ("getTime");
+				return val / 1000f;
+			} else {
+				return audioSource.time;
+			}
 		}
 	}
 

@@ -7,18 +7,14 @@ public class MainController : MonoBehaviour {
 
 	public LowLatencyAudioSource audioSource;
 	public AudioClip sound;
-	public AudioClip music;
 
-	public Text status_txt;
+
 
 	// Use this for initialization
 	void Start () {
 		Application.targetFrameRate = 60;
 	}
 
-	void Update(){
-		status_txt.text = "time="+ audioSource.time;
-	}
 
 
 	public void loadSound(){
@@ -31,13 +27,6 @@ public class MainController : MonoBehaviour {
 	}
 
 
-	public void loadMusic(){
-		audioSource.loadMusic (music);
-	}
-
-	public void playMusic(){
-		audioSource.playMusic (music);
-	}
 
 
 	public void reloadScene(){
