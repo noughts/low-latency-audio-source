@@ -11,6 +11,9 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	Dictionary<string,int> soundIds = new Dictionary<string, int> ();
 
+	/// 再開時に再生を再開するべきか？
+	bool shouldResumeOnFocus = false;
+
 
 	#region delegates
 
@@ -26,21 +29,31 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		}
 	}
 
+	// アプリが中断/再開されたとき。標準のAudioSourceはいい感じに処理するのでそれを真似る
 	void OnApplicationFocus( bool status ){
-		if( onAndroidDevice () ){
-			mediaPlayer.Call( "start" );
+		print ("onFocus=" + status);
+		if( onAndroidDevice ()==false){
+			return;
+		}
+		if( status == false ){
+			print ("アプリが中断しました");
+			mediaPlayer.Call( "pause" );
+			if( isPlaying ){
+				shouldResumeOnFocus = true;
+			}
+		} else {
+			print ("アプリが再開しました");
+			if( shouldResumeOnFocus ){
+				shouldResumeOnFocus = false;
+				mediaPlayer.Call( "start" );
+			}
 		}
 	}
 
-	// アプリが中断した時
-	void OnApplicationPause(){
-		if( onAndroidDevice () ){
-			mediaPlayer.Call( "pause" );
-		}
-	}
+
 
 	void OnDestroy(){
-//		print ("OnDestroy");
+		print ("OnDestroy");
 		if( onAndroidDevice () == false ){
 			return;
 		}
@@ -48,6 +61,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		foreach (KeyValuePair<string, int> pair in soundIds) {
 			soundObj.Call( "unloadSound", new object[] { pair.Value } );
 		}
+		mediaPlayer.Call( "stop" );
 	}
 
 	#endregion
