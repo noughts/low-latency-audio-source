@@ -87,6 +87,10 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		get{
 			if( onAndroidDevice () ){
 				int val = mediaPlayer.Call<int> ("getCurrentPosition");
+				// 再生開始前はマイナスの大きな値が返ってくるので補正
+				if( val < 0 ){
+					val = 0;
+				}
 				return val / 1000f;
 			} else {
 				return audioSource.time;
