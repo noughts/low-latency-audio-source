@@ -1,5 +1,10 @@
 apply plugin: 'java'
 
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'             // コンパイルSDKのバージョンを指定
+jar.baseName = 'MediaPlayerPlugin'      // .jarの名称
+version = '1.0.0'                       // .jarのバージョン値
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('/Users/noughts/Library/Android/sdk/platforms/android-22/android.jar')
