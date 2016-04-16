@@ -1,3 +1,18 @@
+# HOW TO INSTALL
+
+1. Unity プロジェクトの Assets/ に package.json を作成します。
+2. 以下を記述します。
+```json
+{
+	"dependencies": {
+		"low-latency-audio-source": "noughts/low-latency-audio-source"
+	}
+}
+```
+3. Assets/ で npm install します。
+
+
+
 # HOW TO USE
 
 AudioSource と同じように使います。
