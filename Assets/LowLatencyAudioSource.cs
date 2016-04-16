@@ -132,7 +132,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		if( onAndroidDevice () == false ){
 			return;
 		}
-		string path = "Resources/Sounds/" + clip.name + ".ogg";
+		string path = "Resources/Sounds/" + clip.name + ".mp3";
 		print ("MediaPlayerに"+ path +"をロードします");
 		mediaPlayer.Call( "load", new object[] { path } );
 	}
