@@ -11,13 +11,16 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	Dictionary<string,int> soundIds = new Dictionary<string, int> ();
 
+
+	#region delegates
+
 	void Awake(){
 //		print ("Awake");
 		if( onAndroidDevice () ){
 			AndroidJavaClass unityActivityClass =  new AndroidJavaClass( "com.unity3d.player.UnityPlayer" );
 			AndroidJavaObject activityObj = unityActivityClass.GetStatic<AndroidJavaObject>( "currentActivity" );
 			soundObj = new AndroidJavaObject( "com.catsknead.androidsoundfix.AudioCenter", 20, activityObj );
-			mediaPlayer = new AndroidJavaObject( "jp.dividual.LowLatencyAudioSourcePlugin", activityObj );
+			mediaPlayer = new AndroidJavaObject( "jp.dividual.MediaPlayerPlugin", activityObj );
 		} else {
 			audioSource = gameObject.AddComponent<AudioSource> ();
 		}
@@ -29,6 +32,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		}
 	}
 
+	// アプリが中断した時
 	void OnApplicationPause(){
 		if( onAndroidDevice () ){
 			mediaPlayer.Call( "pause" );
@@ -46,6 +50,44 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		}
 	}
 
+	#endregion
+
+
+
+
+
+	#region AudioSourceと同じ機能
+
+	public bool isPlaying{
+		get{
+			if( onAndroidDevice () ){
+				return mediaPlayer.Call<bool> ("isPlaying");
+			} else {
+				return audioSource.isPlaying;
+			}
+		}
+	}
+
+	public float time{
+		get{
+			if( onAndroidDevice () ){
+				int val = mediaPlayer.Call<int> ("getCurrentPosition");
+				return val / 1000f;
+			} else {
+				return audioSource.time;
+			}
+		}
+	}
+
+	#endregion
+
+
+
+
+
+
+
+	#region public
 
 	// Android用にクリップをロード
 	public void load(AudioClip clip){
@@ -96,16 +138,12 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	}
 
 
-	public float time{
-		get{
-			if( onAndroidDevice () ){
-				int val = mediaPlayer.Call<int> ("getTime");
-				return val / 1000f;
-			} else {
-				return audioSource.time;
-			}
-		}
-	}
+
+	#endregion
+
+
+
+
 
 
 
