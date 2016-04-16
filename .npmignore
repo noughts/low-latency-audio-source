@@ -5,3 +5,4 @@ ProjectSettings/
 *.userprefs
 *.csproj
 Assets/example/
+Assets/StreamingAssets/
