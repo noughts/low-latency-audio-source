@@ -37,10 +37,10 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		}
 		if( status == false ){
 			print ("アプリが中断しました");
-			mediaPlayer.Call( "pause" );
 			if( isPlaying ){
-				print ("現在再生中なので、再開時に再生を再開します");
+				print ("現在再生中なので、再開時に再生を再開するようフラグを立てます");
 				shouldResumeOnFocus = true;
+				mediaPlayer.Call( "pause" );
 			}
 		} else {
 			print ("アプリが再開しました shouldResumeOnFocus="+ shouldResumeOnFocus);
