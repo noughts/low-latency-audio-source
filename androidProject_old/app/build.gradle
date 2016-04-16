@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "dividual.jp.androidproject"
+        applicationId "jp.dividual.androidproject"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1

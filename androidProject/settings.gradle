@@ -1,1 +1,1 @@
-include ':app', ':lowlatencyaudiosourceplugin'
+include ':app', ':plugin'
