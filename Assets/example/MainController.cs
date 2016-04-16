@@ -1,26 +1,32 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class MainController : MonoBehaviour {
 
 	public LowLatencyAudioSource audioSource;
-	public AudioClip clip;
+	public AudioClip sound;
+
+
 
 	// Use this for initialization
 	void Start () {
-		
+		Application.targetFrameRate = 60;
 	}
 
 
+
 	public void loadSound(){
-		audioSource.load (clip);
+		audioSource.load (sound);
 	}
 
 
 	public void playSound(){
-		audioSource.play (clip);
+		audioSource.play (sound);
 	}
+
+
 
 
 	public void reloadScene(){
