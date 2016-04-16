@@ -33,6 +33,7 @@ public class MediaPlayerPlugin extends MediaPlayer {
 //			_mediaPlayer.pause();
         } catch( IOException e ) {
             Log.e("LLASP", "File does not exist!");
+            Log.e("LLASP", e.toString());
         }
     }
 

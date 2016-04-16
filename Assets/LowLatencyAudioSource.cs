@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class LowLatencyAudioSource : MonoBehaviour {
 
+	// ループするか？現状、途中での変更は対応していません
+	public bool loop = false;
+
 	/// iOS、エディタ用のaudioSource;
 	AudioSource audioSource;
 	AndroidJavaObject soundObj;
@@ -24,8 +27,10 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			AndroidJavaObject activityObj = unityActivityClass.GetStatic<AndroidJavaObject>( "currentActivity" );
 			soundObj = new AndroidJavaObject( "com.catsknead.androidsoundfix.AudioCenter", 20, activityObj );
 			mediaPlayer = new AndroidJavaObject( "jp.dividual.MediaPlayerPlugin", activityObj );
+			mediaPlayer.Call ("setLooping", new object[] { loop });
 		} else {
 			audioSource = gameObject.AddComponent<AudioSource> ();
+			audioSource.loop = loop;
 		}
 	}
 
@@ -73,6 +78,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	#region AudioSourceと同じ機能
 
+
 	public bool isPlaying{
 		get{
 			if( onAndroidDevice () ){
@@ -117,7 +123,8 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			print ("すでに"+ clip.name +"は登録されています。");
 			return;
 		}
-		int soundId = soundObj.Call<int>( "loadSound", new object[] { "Resources/Sounds/" +  clip.name + ".mp3" } );
+		string path = "Resources/Sounds/" + clip.name + ".mp3";
+		int soundId = soundObj.Call<int>( "loadSound", new object[] { path } );
 		soundIds.Add (clip.name, soundId);
 	}
 
@@ -125,7 +132,9 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		if( onAndroidDevice () == false ){
 			return;
 		}
-		mediaPlayer.Call( "load", new object[] { "Resources/Sounds/" +  clip.name + ".mp3" } );
+		string path = "Resources/Sounds/" + clip.name + ".ogg";
+		print ("MediaPlayerに"+ path +"をロードします");
+		mediaPlayer.Call( "load", new object[] { path } );
 	}
 	public void playMusic( AudioClip clip ){
 		if (onAndroidDevice ()) {
