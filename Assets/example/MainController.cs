@@ -23,7 +23,7 @@ public class MainController : MonoBehaviour {
 
 
 	public void playSound(){
-		audioSource.play (sound);
+		audioSource.PlayOneShot (sound);
 	}
 
 

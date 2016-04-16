@@ -6,6 +6,10 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	// ループするか？現状、途中での変更は対応していません
 	public bool loop = false;
+	public bool playOnAwake = false;
+
+
+	public AudioClip clip;
 
 	/// iOS、エディタ用のaudioSource;
 	AudioSource audioSource;
@@ -31,6 +35,14 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		} else {
 			audioSource = gameObject.AddComponent<AudioSource> ();
 			audioSource.loop = loop;
+			audioSource.clip = clip;
+		}
+
+		if( clip != null ){
+			load (clip);
+		}
+		if( playOnAwake ){
+			Play ();
 		}
 	}
 
@@ -114,8 +126,63 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	#region public
 
-	// Android用にクリップをロード
+	public void Play(){
+		if( clip == null ){
+			Debug.LogWarning ("clipが登録されていません");
+			return;
+		}
+
+		if( onAndroidDevice() == false ){
+			audioSource.Play ();
+			return;
+		}
+
+		if( clip.length > 10 ){
+			mediaPlayer.Call ("start");
+		} else {
+			PlayOneShot (clip);
+		}
+	}
+
+
+
+	public void PlayOneShot( AudioClip clip ){
+		PlayOneShot (clip, 1);
+	}
+
+	/// ボリュームを指定して再生
+	public void PlayOneShot(AudioClip clip, float volume){
+		if( onAndroidDevice () ){
+			if( soundIds.ContainsKey (clip.name) == false ){
+				Debug.LogWarning (clip.name +"はまだロードされていません");
+				return;
+			}
+			int soundId = soundIds [clip.name];
+			soundObj.Call( "playSound", new object[] { soundId, volume } );
+		} else {
+			audioSource.PlayOneShot (clip, volume);
+		}
+	}
+
+
+	// SoundPoolは10秒以上の音声ファイルはロードできないので、長さによって使うモジュールを分ける
 	public void load(AudioClip clip){
+		if( clip.length > 10){
+			loadMusic (clip);
+		} else {
+			loadSound (clip);
+		}
+	}
+
+
+
+
+
+	#endregion
+
+
+	// Android用にクリップをロード
+	void loadSound(AudioClip clip){
 		if( onAndroidDevice () == false ){
 			return;
 		}
@@ -128,7 +195,8 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		soundIds.Add (clip.name, soundId);
 	}
 
-	public void loadMusic(AudioClip clip){
+
+	void loadMusic(AudioClip clip){
 		if( onAndroidDevice () == false ){
 			return;
 		}
@@ -136,41 +204,6 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		print ("MediaPlayerに"+ path +"をロードします");
 		mediaPlayer.Call( "load", new object[] { path } );
 	}
-	public void playMusic( AudioClip clip ){
-		if (onAndroidDevice ()) {
-			mediaPlayer.Call( "start" );
-		} else {
-			audioSource.clip = clip;
-			audioSource.Play ();// playOneShotを使うとtimeがとれないのでこうしてます。
-		}
-	}
-
-
-	/// 再生
-	public void play(AudioClip clip){
-		play (clip, 1);
-	}
-
-	/// ボリュームを指定して再生
-	public void play(AudioClip clip, float volume){
-		if( onAndroidDevice () ){
-			if( soundIds.ContainsKey (clip.name) == false ){
-				print (clip.name +"はまだロードされていません");
-				return;
-			}
-			int soundId = soundIds [clip.name];
-			soundObj.Call( "playSound", new object[] { soundId, volume } );
-		} else {
-			audioSource.PlayOneShot (clip, volume);
-		}
-	}
-
-
-
-	#endregion
-
-
-
 
 
 
