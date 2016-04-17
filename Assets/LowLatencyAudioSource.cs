@@ -48,7 +48,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	// アプリが中断/再開されたとき。標準のAudioSourceはいい感じに処理するのでそれを真似る
 	void OnApplicationFocus( bool status ){
-		print ("onFocus=" + status);
+//		print ("onFocus=" + status);
 		if( onAndroidDevice ()==false){
 			return;
 		}
@@ -71,7 +71,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 
 	void OnDestroy(){
-		print ("OnDestroy");
+//		print ("OnDestroy");
 		if( onAndroidDevice () == false ){
 			return;
 		}
