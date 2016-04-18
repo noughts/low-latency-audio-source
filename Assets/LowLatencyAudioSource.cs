@@ -117,11 +117,11 @@ public class LowLatencyAudioSource : MonoBehaviour {
 				int gap = currentPosition - prevFramePosition;
 
 				if( gap < 0 && gap > (0-clip.length*0.8f) ){
-					Debug.LogWarning ("時間が巻き戻ってるので調整します! "+ prevFramePosition +" => "+ currentPosition );
+//					Debug.LogWarning ("時間が巻き戻ってるので調整します! "+ prevFramePosition +" => "+ currentPosition );
 					float gapTime = currentTime - prevFrameTime;
 					currentPosition = prevFramePosition + (int)(gapTime * 1000);
 				}
-				print ("経過時間:"+ (currentPosition - prevFramePosition));
+//				print ("経過時間:"+ (currentPosition - prevFramePosition));
 
 				prevFramePosition = currentPosition;
 				prevFrameTime = currentTime;
