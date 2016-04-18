@@ -20,8 +20,8 @@ public class BGMController : MonoBehaviour {
 		float currentTime = audioSource.time;
 		status_txt.text = "time="+ currentTime;
 
-		float posX = currentTime*5 % 20;
-		cube.transform.position = new Vector3 (posX-10,0);
+		float posX = currentTime*5 % 10;
+		cube.transform.position = new Vector3 (posX,0);
 	}
 		
 	public void playMusic(){
