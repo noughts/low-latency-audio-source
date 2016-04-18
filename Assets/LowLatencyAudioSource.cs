@@ -153,7 +153,6 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			if( onAndroidDevice () ){
 				float currentTime = Time.time;
 				int currentPosition = mediaPlayer.Call<int> ("getCurrentPosition");
-				print (currentPosition);
 //				currentPosition = currentPosition + 50;// iOSの感覚と合わせる
 				// 再生開始前はマイナスの大きな値が返ってくるので補正
 				if( currentPosition < 0 ){
@@ -163,7 +162,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 				int gap = currentPosition - prevFramePosition;
 				if( -1000 < gap && gap < 0 ){
 //					Debug.LogWarning ("時間が若干巻き戻ってます! "+ prevFramePosition +" => "+ currentPosition );
-//					currentPosition = prevFramePosition;
+					currentPosition = prevFramePosition;
 				}
 //				print ("経過時間:"+ (currentPosition - prevFramePosition));
 				prevFramePosition = currentPosition;
