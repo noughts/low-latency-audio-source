@@ -215,7 +215,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			print ("すでに"+ clip.name +"は登録されています。");
 			return;
 		}
-		string path = "Resources/Sounds/" + clip.name + ".mp3";
+		string path = "Resources/Sounds/" + clip.name + ".m4a";
 		int soundId = soundObj.Call<int>( "loadSound", new object[] { path } );
 		soundIds.Add (clip.name, soundId);
 	}
@@ -225,7 +225,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 		if( onAndroidDevice () == false ){
 			return;
 		}
-		string path = "Resources/Sounds/" + clip.name + ".mp3";
+		string path = "Resources/Sounds/" + clip.name + ".m4a";
 		print ("MediaPlayerに"+ path +"をロードします");
 		mediaPlayer.Call( "load", new object[] { path } );
 	}
