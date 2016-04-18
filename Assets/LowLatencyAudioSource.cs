@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -153,6 +153,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			if( onAndroidDevice () ){
 				float currentTime = Time.time;
 				int currentPosition = mediaPlayer.Call<int> ("getCurrentPosition");
+//				currentPosition = currentPosition + 50;// iOSの感覚と合わせる
 				// 再生開始前はマイナスの大きな値が返ってくるので補正
 				if( currentPosition < 0 ){
 					currentPosition = 0;
@@ -215,7 +216,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			print ("すでに"+ clip.name +"は登録されています。");
 			return;
 		}
-		string path = "Resources/Sounds/" + clip.name + ".m4a";
+		string path = "Resources/Sounds/" + clip.name + ".wav";
 		int soundId = soundObj.Call<int>( "loadSound", new object[] { path } );
 		soundIds.Add (clip.name, soundId);
 	}
