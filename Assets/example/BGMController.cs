@@ -8,7 +8,6 @@ public class BGMController : MonoBehaviour {
 	public LowLatencyAudioSource audioSource;
 	public Text status_txt;
 
-	float prevTime = -1;
 
 	// Use this for initialization
 	void Start () {
@@ -17,13 +16,7 @@ public class BGMController : MonoBehaviour {
 	
 
 	void Update(){
-		float currentTime = audioSource.time;
-		if( currentTime < prevTime ){
-			print ("timeが巻き戻ってます!!!");
-			print (prevTime + " => "+ currentTime);
-		}
-		status_txt.text = "time="+ currentTime;
-		prevTime = currentTime;
+		status_txt.text = "time="+ audioSource.time;
 	}
 		
 	public void playMusic(){

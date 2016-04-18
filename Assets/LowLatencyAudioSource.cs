@@ -23,7 +23,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	// mediaPlayerのcurrentPositionは不安定なことがあるので、それを補正するための変数
 	int prevFramePosition = 0;
-	int prevFrameTime = 0;
+	float prevFrameTime = 0;
 
 	#region delegates
 
@@ -107,12 +107,19 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	public float time{
 		get{
 			if( onAndroidDevice () ){
-				int val = mediaPlayer.Call<int> ("getCurrentPosition");
+				int currentPosition = mediaPlayer.Call<int> ("getCurrentPosition");
 				// 再生開始前はマイナスの大きな値が返ってくるので補正
-				if( val < 0 ){
-					val = 0;
+				if( currentPosition < 0 ){
+					currentPosition = 0;
 				}
-				return val / 1000f;
+				print ("経過時間:"+ (currentPosition - prevFramePosition));
+
+				if( currentPosition < prevFramePosition ){
+					Debug.LogWarning ("時間が巻き戻ってます! "+ prevFramePosition +" => "+ currentPosition );
+				}
+				prevFramePosition = currentPosition;
+				prevFrameTime = Time.time;
+				return currentPosition / 1000f;
 			} else {
 				return audioSource.time;
 			}
