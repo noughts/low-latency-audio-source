@@ -7,6 +7,7 @@ public class BGMController : MonoBehaviour {
 	
 	public LowLatencyAudioSource audioSource;
 	public Text status_txt;
+	public GameObject cube;
 
 
 	// Use this for initialization
@@ -16,7 +17,11 @@ public class BGMController : MonoBehaviour {
 	
 
 	void Update(){
-		status_txt.text = "time="+ audioSource.time;
+		float currentTime = audioSource.time;
+		status_txt.text = "time="+ currentTime;
+
+		float posX = currentTime*5 % 20;
+		cube.transform.position = new Vector3 (posX-10,0);
 	}
 		
 	public void playMusic(){
