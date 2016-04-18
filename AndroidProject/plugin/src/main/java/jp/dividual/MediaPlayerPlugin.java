@@ -29,8 +29,8 @@ public class MediaPlayerPlugin extends MediaPlayer {
             prepare();
 
             // レイテンシを下げるためにプリロード
-			_mediaPlayer.start();
-			_mediaPlayer.pause();
+			start();
+			pause();
         } catch( IOException e ) {
             Log.e("LLASP", "File does not exist!");
             Log.e("LLASP", e.toString());
