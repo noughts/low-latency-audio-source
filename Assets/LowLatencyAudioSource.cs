@@ -21,6 +21,9 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	/// 再開時に再生を再開するべきか？
 	bool shouldResumeOnFocus = false;
 
+	// mediaPlayerのcurrentPositionは不安定なことがあるので、それを補正するための変数
+	int prevFramePosition = 0;
+	int prevFrameTime = 0;
 
 	#region delegates
 
