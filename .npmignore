@@ -1,3 +1,4 @@
+*.meta
 AndroidProject/
 AudioFixPluginForAndroid/
 ProjectSettings/
