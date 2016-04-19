@@ -115,6 +115,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 		if( clip.length > 10 ){
 			mediaPlayer.Call ("start");
+			print ("Play!!!!!");
 			startTime = Time.time;
 		} else {
 			PlayOneShot (clip);
@@ -160,13 +161,16 @@ public class LowLatencyAudioSource : MonoBehaviour {
 				// loopingの時に、ループしたタイミングでstartTimeをリセット
 				int currentPosition = mediaPlayer.Call<int> ("getCurrentPosition");
 				int gap = currentPosition - prevFramePosition;
-				print (gap +" / "+ (clip.length*1000));
 				if( gap < 0 - clip.length*1000*0.8 ){
 					print ("巻き戻します");
 					startTime = Time.time;
 				}
 				prevFramePosition = currentPosition;
-				return Time.time - startTime;
+				float result = Time.time - startTime;
+
+				print (currentPosition + " / "+ (result*1000) +" gap=>"+ (currentPosition-(result*1000)));
+
+				return result;
 				/*
 				float currentTime = Time.time;
 				int currentPosition = mediaPlayer.Call<int> ("getCurrentPosition");
