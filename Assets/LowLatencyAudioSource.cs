@@ -8,6 +8,9 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	public bool loop = false;
 	public bool playOnAwake = false;
 
+	/// ネイティブプラグインを使わない
+	public bool forceUnitySoundSystem = false;
+
 
 	public AudioClip clip;
 
@@ -30,7 +33,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	void Awake(){
 //		print ("Awake");
-		if( onAndroidDevice () ){
+		if( shouldUseAndroidPlugin () ){
 			AndroidJavaClass unityActivityClass =  new AndroidJavaClass( "com.unity3d.player.UnityPlayer" );
 			AndroidJavaObject activityObj = unityActivityClass.GetStatic<AndroidJavaObject>( "currentActivity" );
 			soundObj = new AndroidJavaObject( "com.catsknead.androidsoundfix.AudioCenter", 20, activityObj );
@@ -53,7 +56,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	// アプリが中断/再開されたとき。標準のAudioSourceはいい感じに処理するのでそれを真似る
 	void OnApplicationFocus( bool status ){
 //		print ("onFocus=" + status);
-		if( onAndroidDevice ()==false){
+		if( shouldUseAndroidPlugin ()==false){
 			return;
 		}
 		if( status == false ){
@@ -76,7 +79,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	void OnDestroy(){
 //		print ("OnDestroy");
-		if( onAndroidDevice () == false ){
+		if( shouldUseAndroidPlugin () == false ){
 			return;
 		}
 		print ("このAudioSourceにロード済みの全てのサウンドをunloadします");
@@ -95,7 +98,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	#region AudioSourceと同じ機能
 
 	public void Stop(){
-		if( onAndroidDevice() ){
+		if( shouldUseAndroidPlugin() ){
 			mediaPlayer.Call ("stop");
 		} else {
 			audioSource.Stop ();
@@ -108,7 +111,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 			return;
 		}
 
-		if( onAndroidDevice() == false ){
+		if( shouldUseAndroidPlugin() == false ){
 			audioSource.Play ();
 			return;
 		}
@@ -128,7 +131,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	/// ボリュームを指定して再生
 	public void PlayOneShot(AudioClip clip, float volume){
-		if( onAndroidDevice () ){
+		if( shouldUseAndroidPlugin () ){
 			if( soundIds.ContainsKey (clip.name) == false ){
 				Debug.LogWarning (clip.name +"はまだロードされていません");
 				return;
@@ -143,7 +146,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	public bool isPlaying{
 		get{
-			if( onAndroidDevice () ){
+			if( shouldUseAndroidPlugin () ){
 				return mediaPlayer.Call<bool> ("isPlaying");
 			} else {
 				return audioSource.isPlaying;
@@ -153,7 +156,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	public float time{
 		get{
-			if( onAndroidDevice () ){
+			if( shouldUseAndroidPlugin () ){
 				if( isPlaying == false ){
 					return 0;
 				}
@@ -168,7 +171,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 				prevFramePosition = currentPosition;
 				float result = Time.time - startTime;
 
-				print (currentPosition + " / "+ (result*1000) +" gap=>"+ (currentPosition-(result*1000)));
+//				print (currentPosition + " / "+ (result*1000) +" gap=>"+ (currentPosition-(result*1000)));
 
 				return result;
 				/*
@@ -229,7 +232,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 	// Android用にクリップをロード
 	void loadSound(AudioClip clip){
-		if( onAndroidDevice () == false ){
+		if( shouldUseAndroidPlugin () == false ){
 			return;
 		}
 		if( soundIds.ContainsKey (clip.name) ){
@@ -243,7 +246,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 
 	void loadMusic(AudioClip clip){
-		if( onAndroidDevice () == false ){
+		if( shouldUseAndroidPlugin () == false ){
 			return;
 		}
 		string path = "Resources/Sounds/" + clip.name + ".wav";
@@ -254,7 +257,11 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 
 
-	bool onAndroidDevice(){
+	bool shouldUseAndroidPlugin(){
+		if( forceUnitySoundSystem ){
+			return false;
+		}
+
 		#if UNITY_EDITOR
 		return false;
 		#endif

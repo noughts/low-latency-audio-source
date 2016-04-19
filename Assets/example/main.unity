@@ -250,6 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loop: 1
   playOnAwake: 0
+  forceUnitySoundSystem: 0
   clip: {fileID: 8300000, guid: 3344f752633a34fea88a519c7347bfa1, type: 3}
 --- !u!4 &470808117
 Transform:
@@ -925,6 +926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loop: 0
   playOnAwake: 0
+  forceUnitySoundSystem: 0
   clip: {fileID: 0}
 --- !u!114 &1288647800
 MonoBehaviour:
