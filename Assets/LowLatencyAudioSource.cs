@@ -24,6 +24,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	// mediaPlayerのcurrentPositionは不安定なことがあるので、それを補正するための変数
 	int prevFramePosition = 0;
 	float prevFrameTime = 0;
+	float startTime = 0;
 
 	#region delegates
 
@@ -114,6 +115,7 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 		if( clip.length > 10 ){
 			mediaPlayer.Call ("start");
+			startTime = Time.time;
 		} else {
 			PlayOneShot (clip);
 		}
@@ -151,6 +153,21 @@ public class LowLatencyAudioSource : MonoBehaviour {
 	public float time{
 		get{
 			if( onAndroidDevice () ){
+				if( isPlaying == false ){
+					return 0;
+				}
+
+				// loopingの時に、ループしたタイミングでstartTimeをリセット
+				int currentPosition = mediaPlayer.Call<int> ("getCurrentPosition");
+				int gap = currentPosition - prevFramePosition;
+				print (gap +" / "+ (clip.length*1000));
+				if( gap < 0 - clip.length*1000*0.8 ){
+					print ("巻き戻します");
+					startTime = Time.time;
+				}
+				prevFramePosition = currentPosition;
+				return Time.time - startTime;
+				/*
 				float currentTime = Time.time;
 				int currentPosition = mediaPlayer.Call<int> ("getCurrentPosition");
 //				currentPosition = currentPosition + 50;// iOSの感覚と合わせる
@@ -161,13 +178,12 @@ public class LowLatencyAudioSource : MonoBehaviour {
 
 				int gap = currentPosition - prevFramePosition;
 				if( -1000 < gap && gap < 0 ){
-//					Debug.LogWarning ("時間が若干巻き戻ってます! "+ prevFramePosition +" => "+ currentPosition );
 					currentPosition = prevFramePosition;
 				}
-//				print ("経過時間:"+ (currentPosition - prevFramePosition));
 				prevFramePosition = currentPosition;
 				prevFrameTime = currentTime;
 				return currentPosition / 1000f;
+				*/
 			} else {
 				return audioSource.time;
 			}
